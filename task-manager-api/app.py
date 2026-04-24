@@ -1,34 +1,52 @@
-from flask import Flask
+import os
+from flask import Flask, jsonify
 from flask_cors import CORS
 from database import db
 from routes.task_routes import task_bp
 from routes.user_routes import user_bp
 from routes.report_routes import report_bp
-import os, sys, json, datetime
+from dotenv import load_dotenv
 
-app = Flask(__name__)
+# Carrega .env
+load_dotenv()
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tasks.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'super-secret-key-123'
+def create_app():
+    app = Flask(__name__)
+    
+    # Configurações via Env (AP-001/AP-002 fix)
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///tasks.db')
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-key')
 
-CORS(app)
-db.init_app(app)
+    CORS(app)
+    db.init_app(app)
 
-app.register_blueprint(task_bp)
-app.register_blueprint(user_bp)
-app.register_blueprint(report_bp)
+    # Registro de Blueprints
+    app.register_blueprint(task_bp)
+    app.register_blueprint(user_bp)
+    app.register_blueprint(report_bp)
 
-@app.route('/health')
-def health():
-    return {'status': 'ok', 'timestamp': str(datetime.datetime.now())}
+    @app.route('/health')
+    def health():
+        return jsonify({'status': 'ok', 'env': os.getenv('NODE_ENV', 'development')})
 
-@app.route('/')
-def index():
-    return {'message': 'Task Manager API', 'version': '1.0'}
+    @app.route('/')
+    def index():
+        return jsonify({'message': 'Task Manager API Refatorada (MVC)', 'version': '2.0'})
 
-with app.app_context():
-    db.create_all()
+    # Error Handling Global
+    @app.errorhandler(Exception)
+    def handle_error(e):
+        code = 500
+        if hasattr(e, 'code'): code = e.code
+        return jsonify({'error': str(e), 'success': False}), code
+
+    return app
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app = create_app()
+    with app.app_context():
+        db.create_all()
+    
+    port = int(os.getenv('PORT', 5000))
+    app.run(debug=True, host='0.0.0.0', port=port)
