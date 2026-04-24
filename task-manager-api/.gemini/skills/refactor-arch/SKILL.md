@@ -10,9 +10,11 @@ This skill automates the modernization of legacy applications into a clean MVC (
 ## Mandatory Success Criteria
 To consider the execution successful, the following must be achieved:
 1. **Phase 1**: Correctly detect the language, framework, and database (100% accuracy required).
-2. **Phase 2**: Identify at least **5 findings** in the audit.
-3. **Phase 2**: At least **1 finding** must be classified as **CRITICAL** or **HIGH**.
-4. **Phase 3**: The application must be fully functional after refactoring, with all original endpoints preserved and validated.
+2. **Phase 2**: Identify and document at least **5 findings** in the audit, strictly following this distribution:
+    - At least **1 finding** of **CRITICAL** or **HIGH** severity.
+    - At least **2 findings** of **MEDIUM** severity.
+    - At least **2 findings** of **LOW** severity.
+3. **Phase 3**: The application must be fully functional after refactoring, with all original endpoints preserved and validated.
 
 ## Workflow Phases
 
@@ -24,8 +26,8 @@ Goal: Detect the stack and map the project structure.
 
 ### Phase 2: Audit
 Goal: Identify architectural and quality issues.
-1. Use `references/anti_patterns_catalog.md` to detect at least 8 anti-patterns or code smells (minimum 5 required for success).
-2. Classify each finding by severity (CRITICAL, HIGH, MEDIUM, LOW). Ensure at least one is CRITICAL or HIGH.
+1. Use `references/anti_patterns_catalog.md` to detect the required findings.
+2. Classify each finding by severity (CRITICAL, HIGH, MEDIUM, LOW) ensuring the 1/2/2 distribution is met.
 3. Generate a structured report using the template in `references/report_template.md`.
 4. Save the report in the `/reports` directory of the project.
 5. **PAUSE FOR CONFIRMATION**: Present the report summary to the user and wait for explicit approval before proceeding to Phase 3.
