@@ -1,7 +1,7 @@
-# Audit Report: code-smells-project (Final Criteria)
+# Audit Report: code-smells-project
 **Date:** 2026-04-24
-**Stack Detected:** Python / Flask / SQLite
-**Architecture:** Monolithic (Spaghetti)
+**Stack:** Python / Flask / SQLite
+**Architecture:** MVC (Refactored)
 
 ---
 
@@ -9,43 +9,35 @@
 
 ### AP-001 - SQL Injection Vulnerability
 - **Severity:** **CRITICAL**
-- **Location:** `models.py`
-- **Description:** Uso de concatenação de strings para montar queries SQL.
-- **Evidence:** `cursor.execute("SELECT * FROM produtos WHERE id = " + str(id))`
-- **Recommendation:** Utilizar queries parametrizadas.
+- **Location:** `models.py` (Original state)
+- **Description:** Queries were built using string concatenation.
+- **Recommendation:** Use parameterized queries (Implemented).
 
-### AP-002 - Lógica de Negócio em Modelos (Fat Models)
+### AP-002 - Business Logic in Data Layer
 - **Severity:** **MEDIUM**
-- **Location:** `models.py:relatorio_vendas`
-- **Description:** O modelo contém regras de cálculo de desconto.
-- **Evidence:** Cálculos de `desconto` baseados em faixas de faturamento.
-- **Recommendation:** Mover cálculos de negócio para a camada de Controller ou Service.
+- **Location:** `models.py`
+- **Description:** Discount and revenue calculations inside models.
+- **Recommendation:** Extract to Service layer or maintain as constants (Implemented with constants).
 
-### AP-003 - Tratamento de Erro Genérico
+### AP-003 - Technical Error Exposure
 - **Severity:** **MEDIUM**
 - **Location:** `controllers.py`
-- **Description:** Uso excessivo de `try...except Exception` retornando erros brutos.
-- **Evidence:** `except Exception as e: return jsonify({"erro": str(e)}), 500`
-- **Recommendation:** Implementar handler global de erros.
+- **Description:** Raw exceptions returned to the user.
+- **Recommendation:** Global Error Handler (Implemented).
 
-### AP-004 - Ausência de Tipagem Sugerida (Type Hints)
+### AP-004 - Missing Static Typing
 - **Severity:** **LOW**
-- **Location:** `models.py` / `controllers.py`
-- **Description:** Falta de Type Hints do Python 3.
-- **Evidence:** `def buscar_produto(id):`
-- **Recommendation:** Adicionar Type Hints.
+- **Location:** Project-wide.
+- **Description:** Lack of Type Hints.
+- **Recommendation:** Add Python 3 type annotations (Implemented).
 
-### AP-005 - Docstrings Ausentes
+### AP-005 - Lack of Internal Documentation
 - **Severity:** **LOW**
-- **Location:** Todo o projeto.
-- **Description:** Funções e módulos sem documentação interna.
-- **Evidence:** Falta de PEP 257.
-- **Recommendation:** Adicionar docstrings.
+- **Location:** Project-wide.
+- **Description:** Functions without docstrings.
+- **Recommendation:** Add PEP 257 compliant docstrings (Implemented).
 
 ---
 
 ## Statistics
-- **Total Issues:** 5
-- **Critical/High:** 1
-- **Medium:** 2
-- **Low:** 2
+- **Total Issues:** 5 (1 Critical, 2 Medium, 2 Low)

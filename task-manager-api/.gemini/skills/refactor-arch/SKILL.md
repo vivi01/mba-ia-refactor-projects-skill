@@ -8,44 +8,57 @@ description: Automates analysis, auditing, and refactoring of legacy codebases t
 This skill automates the modernization of legacy applications into a clean MVC (Model-View-Controller) architecture.
 
 ## Mandatory Success Criteria
-To consider the execution successful, the following must be achieved:
-1. **Phase 1**: Correctly detect the language, framework, and database (100% accuracy required).
-2. **Phase 2**: Identify and document at least **5 findings** in the audit, strictly following this distribution:
+To consider the execution successful, you MUST follow and verify the checklist below:
+
+### Phase 1 — Analysis (Verification)
+- [ ] Detect language and framework accurately.
+- [ ] **Describe application domain clearly (e.g., E-commerce, LMS, Task Management)**.
+- [ ] Count analyzed source files correctly.
+
+### Phase 2 — Audit (Verification)
+- [ ] Follow `references/report_template.md` strictly.
+- [ ] Provide exact file paths and line numbers for each finding.
+- [ ] Order findings by severity: CRITICAL → LOW.
+- [ ] **Identify and document at least 5 findings strictly following this distribution**:
     - At least **1 finding** of **CRITICAL** or **HIGH** severity.
     - At least **2 findings** of **MEDIUM** severity.
     - At least **2 findings** of **LOW** severity.
-3. **Phase 3**: The application must be fully functional after refactoring, with all original endpoints preserved and validated.
+- [ ] **Save the report in the root `/reports` directory as `audit-project-x.md` (where x is 1, 2, or 3)**.
+- [ ] Include deprecated API detection where applicable.
+- [ ] **PAUSE**: Ask for explicit confirmation before Phase 3.
+
+### Phase 3 — Refactoring (Verification)
+- [ ] Implement target directory structure (Models, Controllers, Views/Routes).
+- [ ] Extract hardcoded config to module/environment variables.
+- [ ] Create Models for data abstraction.
+- [ ] Separate Views/Routes for interface/routing.
+- [ ] Use Controllers to orchestrate application flow.
+- [ ] Centralize error handling globally.
+- [ ] Maintain a clear entry point (e.g., `app.py`, `app.js`).
+- [ ] Ensure application boots without errors.
+- [ ] Verify all original endpoints respond correctly.
 
 ## Workflow Phases
 
 ### Phase 1: Analysis
-Goal: Detect the stack and map the project structure.
-1. Use `references/analysis_heuristics.md` to identify the language, framework, database, and current architecture.
-2. List the main components and entry points of the application.
-3. Summarize the application's purpose and current state.
+Goal: Detect the stack and map project structure.
+1. Use `references/analysis_heuristics.md`.
+2. **Summarize purpose, stack, source file count, and clearly define the application domain**.
 
 ### Phase 2: Audit
 Goal: Identify architectural and quality issues.
-1. Use `references/anti_patterns_catalog.md` to detect the required findings.
-2. Classify each finding by severity (CRITICAL, HIGH, MEDIUM, LOW) ensuring the 1/2/2 distribution is met.
-3. Generate a structured report using the template in `references/report_template.md`.
-4. Save the report in the `/reports` directory of the project.
-5. **PAUSE FOR CONFIRMATION**: Present the report summary to the user and wait for explicit approval before proceeding to Phase 3.
+1. Use `references/anti_patterns_catalog.md`.
+2. Generate report using `references/report_template.md` and **save it to the root `reports/` folder**.
+3. **PAUSE FOR CONFIRMATION**: Present summary and wait for approval.
 
 ### Phase 3: Refactoring
 Goal: Transform the codebase into an MVC structure.
-1. Apply the target architecture defined in `references/mvc_guidelines.md`.
-2. Follow the patterns in `references/refactoring_playbook.md` to fix the identified anti-patterns.
-3. Specific tasks:
-    - Separate logic into `Models`, `Views/Routes`, and `Controllers`.
-    - Move hardcoded configurations to environment variables.
-    - Centralize error handling.
-4. **Validation**:
-    - Ensure the application starts without errors.
-    - Verify that endpoints are functional and preserve their original behavior.
-5. **Finalization**: Commit the changes with a clear message describing the refactoring (after user confirmation of successful validation).
+1. Apply `references/mvc_guidelines.md` and `references/refactoring_playbook.md`.
+2. **Mandatory Tasks**: Separate layers, move config to `.env`, and centralize errors.
+3. **Validation**: Run boot and endpoint tests.
+4. **Finalization**: Commit after successful validation.
 
 ## Guidelines
-- **Technology Agnostic**: Adapt your approach based on the detected stack.
+- **Technology Agnostic**: Adapt behavior based on detected stack.
 - **Incremental Changes**: Make surgical edits to preserve functionality.
-- **Security First**: Prioritize fixing CRITICAL security vulnerabilities like SQL injection or hardcoded secrets.
+- **Security First**: Prioritize fixing CRITICAL vulnerabilities.

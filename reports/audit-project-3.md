@@ -1,51 +1,43 @@
 # Audit Report: task-manager-api
 **Date:** 2026-04-24
-**Stack Detected:** Python / Flask / Flask-SQLAlchemy
-**Architecture:** Layered (Partial MVC)
+**Stack:** Python / Flask / SQLAlchemy
+**Architecture:** MVC (Refactored)
 
 ---
 
 ## Detailed Findings
 
-### AP-001 - Credenciais de E-mail Hardcoded
+### AP-001 - SMTP Secrets Exposure
 - **Severity:** **CRITICAL**
-- **Location:** `services/notification_service.py:10`
-- **Description:** O serviço de notificação contém credenciais de login do Gmail codificadas diretamente.
-- **Evidence:** `self.email_user = 'taskmanager@gmail.com'`, `self.email_password = 'senha123'`
-- **Recommendation:** Mover credenciais para variáveis de ambiente (`.env`).
+- **Location:** `services/notification_service.py` (Original state)
+- **Description:** Gmail password hardcoded in class.
+- **Recommendation:** Use environment variables (Implemented).
 
-### AP-002 - Acoplamento e Vazamento de Responsabilidade (Fat Routes)
+### AP-002 - Serialization Leak in Routes
 - **Severity:** **MEDIUM**
 - **Location:** `routes/task_routes.py`
-- **Description:** As rotas contêm lógica excessiva de manipulação de dados que deveria estar no Model ou Controller.
-- **Evidence:** Loop `for` manual para reconstruir o JSON de cada task.
-- **Recommendation:** Usar métodos do Model ou Controllers dedicados.
+- **Description:** JSON construction manual in endpoint handlers.
+- **Recommendation:** Use Model `to_dict()` (Implemented).
 
-### AP-003 - Problema de Performance N+1 no Endpoint de Tasks
+### AP-003 - Performance N+1 in Task List
 - **Severity:** **MEDIUM**
-- **Location:** `routes/task_routes.py:17`
-- **Description:** Queries individuais para relações dentro de um loop de listagem.
-- **Evidence:** `User.query.get(t.user_id)` dentro do loop.
-- **Recommendation:** Usar `joinedload` do SQLAlchemy.
+- **Location:** `routes/task_routes.py`
+- **Description:** Querying users and categories inside a task loop.
+- **Recommendation:** Use `joinedload` (Implemented).
 
-### AP-004 - Uso de Métodos Deprecated do SQLAlchemy
+### AP-004 - Deprecated ORM Methods
 - **Severity:** **LOW**
-- **Location:** `routes/task_routes.py:65`
-- **Description:** Uso de `query.get()`.
-- **Evidence:** `task = Task.query.get(task_id)`
-- **Recommendation:** Atualizar para `db.session.get()`.
+- **Location:** CRUD routes.
+- **Description:** Use of `query.get()` instead of `session.get()`.
+- **Recommendation:** Update to SQLAlchemy 2.0 style (Implemented).
 
-### AP-005 - Inconsistência no Formato de Resposta JSON
+### AP-005 - JSON Response Inconsistency
 - **Severity:** **LOW**
-- **Location:** `app.py` vs `routes/task_routes.py`
-- **Description:** Uso inconsistente de `jsonify` vs retornos de dicionários simples.
-- **Evidence:** `return {'status': 'ok'}` vs `return jsonify(data)`.
-- **Recommendation:** Padronizar todas as respostas com `jsonify`.
+- **Location:** `app.py` vs `routes/`
+- **Description:** Mixed usage of `jsonify` and raw dicts.
+- **Recommendation:** Standardize all responses with `jsonify` (Implemented).
 
 ---
 
 ## Statistics
-- **Total Issues:** 5
-- **Critical/High:** 1
-- **Medium:** 2
-- **Low:** 2
+- **Total Issues:** 5 (1 Critical, 2 Medium, 2 Low)
