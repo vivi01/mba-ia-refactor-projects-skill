@@ -16,7 +16,7 @@
 
 ### [Finding ID: e.g., AP-001] - [Anti-Pattern Name]
 - **Severity:** [CRITICAL | HIGH | MEDIUM | LOW]
-- **Location:** `[file_path]:[line_number]`
+- **Location:** `[file_path]:[line_start]-[line_end]` (MANDATORY: Provide the exact line range where the issue is located)
 - **Description:** [What was found and why it's a problem.]
 - **Evidence:** 
   ```[language]

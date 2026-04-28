@@ -9,32 +9,32 @@
 
 ### AP-001 - Hardcoded Secrets in Utils
 - **Severity:** **CRITICAL**
-- **Location:** `src/utils.js:1-7` (Original state)
-- **Description:** Payment Gateway Keys and DB passwords in source code.
+- **Location:** `src/utils.js:1-7`
+- **Description:** Payment Gateway Keys and DB passwords defined directly in source code.
 - **Recommendation:** Move to `.env` (Implemented).
 
 ### AP-002 - God Object (SRP Violation)
 - **Severity:** **MEDIUM**
 - **Location:** `src/GodManager.js:4-150`
-- **Description:** Single class handling DB, routing, and logic.
+- **Description:** Single class `AppManager` handling DB, routing, and business logic.
 - **Recommendation:** Separate into MVC layers (Implemented).
 
 ### AP-003 - Insecure Password Storage
 - **Severity:** **MEDIUM**
-- **Location:** `src/utils.js:19-26` (badCrypto)
-- **Description:** Base64 transformation used as security.
-- **Recommendation:** Use `bcryptjs` (Implemented).
+- **Location:** `src/utils.js:18-24`
+- **Description:** Weak custom "cryptography" function `badCrypto` using base64 loops.
+- **Recommendation:** Use standard hashing libraries like `bcryptjs` (Implemented).
 
 ### AP-004 - Performance N+1 in Reports
 - **Severity:** **LOW**
-- **Location:** `src/GodManager.js:92-135`
-- **Description:** SQL queries inside loops for financial reports.
-- **Recommendation:** Use SQL JOINs (Implemented).
+- **Location:** `src/GodManager.js:93-138`
+- **Description:** Nested SQL queries inside loops for generating financial reports.
+- **Recommendation:** Use SQL JOINs to consolidate queries (Implemented).
 
 ### AP-005 - Input Validation Gap
 - **Severity:** **LOW**
-- **Location:** `src/GodManager.js:41-47` (Checkout flow)
-- **Description:** Missing e-mail and card format validation.
+- **Location:** `src/GodManager.js:43-85`
+- **Description:** Missing email and card format validation in the checkout flow.
 - **Recommendation:** Use validation middleware (Implemented basic checks).
 
 ---

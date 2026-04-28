@@ -17,7 +17,7 @@ To consider the execution successful, you MUST follow and verify the checklist b
 
 ### Phase 2 — Audit (Verification)
 - [ ] Follow `references/report_template.md` strictly.
-- [ ] Provide exact file paths and line numbers for each finding.
+- [ ] Provide exact file paths and specific line ranges (e.g., `file.py:10-25`) for each finding. Vague references like `models.py` or `Project-wide` without line ranges are strictly prohibited.
 - [ ] Order findings by severity: CRITICAL → LOW.
 - [ ] **Identify and document at least 5 findings strictly following this distribution**:
     - At least **1 finding** of **CRITICAL** or **HIGH** severity.
